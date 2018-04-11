@@ -76,6 +76,12 @@ For details, take the [tour](tour.rkt).
 
 To uninstall, `raco pkg remove spicy`.
 
+## How it works
+
+Essentially, a custom `#%app` macro to rewrite function applications at compile time, a customized `curry`, and [four lines of code](spicy/main.rkt) to package that as a language that borrows everything else from Racket.
+
+Also, the [`compose`](https://docs.racket-lang.org/reference/procedures.html#%28def._%28%28lib._racket%2Fprivate%2Flist..rkt%29._compose%29%29) function is overridden by a curry-aware version, which spices its arguments.
+
 ## Disclaimer
 
 Primarily meant for teaching purposes. Tested only on toy examples.
