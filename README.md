@@ -86,6 +86,8 @@ Also, the [`compose`](https://docs.racket-lang.org/reference/procedures.html#%28
 
 Primarily meant for teaching purposes. Tested only on toy examples.
 
+Not completely seamless, and cannot be. Automatic currying and variadic functions do not play well together; also, dynamic typing implies that the system won't notice if you miss an argument somewhere - which may make your code hard to debug. For discussion on the topic, see e.g. [here](https://stackoverflow.com/questions/11218905/is-it-possible-to-implement-auto-currying-to-the-lisp-family-languages), [here](http://paqmind.com/blog/currying-in-lisp/) and [here](https://stackoverflow.com/questions/31373507/rich-hickeys-reason-for-not-auto-currying-clojure-functions).
+
 ## License
 
 [GNU LGPL 3.0](https://www.gnu.org/licenses/lgpl-3.0.html).
