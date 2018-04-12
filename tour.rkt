@@ -50,14 +50,17 @@ module+ main
   thunk()
   ;
   define thunk-with-values()  ; 0-arity with multiple return values
-    values 'a 'b 'c
+    values 'multiple 'return 'values
   thunk-with-values()
   ;
   ;; Optional args
-  define f-with-optional-arg([x 42])
+  define f-with-optional-arg([x 23])
     displayln x
-  procedure-arity f-with-optional-arg  ; '(0 1)
-  f-with-optional-arg(23)
+  displayln
+    format
+      "arity is ~a"
+      procedure-arity f-with-optional-arg  ; '(0 1)
+  f-with-optional-arg(17)
   f-with-optional-arg()  ; 0 is a valid arity for this proc; calls immediately
   ;
   ;; On the other hand:
@@ -72,3 +75,48 @@ module+ main
     add 1
   ;
   add1 41
+  ;
+  ;; Demonstrate left-associativity of function application
+  ;; in the extra-args passthrough mechanism:
+  define gather(x)
+    define stack empty
+    define f(x)
+      displayln
+        format "gather: x ~a, stack ~a" x stack
+      cond
+        (eq? x 'get)
+          reverse stack
+        else
+          set! stack (cons x stack)
+          curry f
+    f x
+  ;
+  gather 2 3 4
+  ((gather 2) 3) 4  ; same result
+  ;
+  gather 2
+  ;
+  gather 2 3 4 'get
+  ;
+  ; But CAUTION:
+  define buggy-gather(x)
+    define stack empty
+    define f([x #f])  ; making the arg optional may seem an elegant alternative for 'get
+      displayln
+        format "buggy-gather: x ~a, stack ~a" x stack
+      cond
+        x
+          set! stack (cons x stack)
+          curry f
+        else
+          reverse stack
+    f x
+  ;
+  buggy-gather 2 3 4
+  buggy-gather 2
+  ((buggy-gather 2 3 4))  ; note extra 0-arg call
+  ;
+  ;; But this version doesn't chain properly. This is a limitation due to how we always
+  ;; implicitly call the curried procedure with 0 arguments (which makes some other things
+  ;; work more nicely).
+  (buggy-gather 2) 3
