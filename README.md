@@ -1,22 +1,5 @@
 # spicy: Automatic currying for Racket
 
-**Not** spicy:
-
-```racket
-#lang racket
-
-(define ->1(f) (λ (a b) (values (f a) b)))
-(define (map f . args)
-  (apply curry foldr (compose cons (->1 f)) empty args))
-
-(module+ main
-  (define a '(1 2 3))
-  (define (f x) (* x x))
-  (map f a))
-```
-
-Spicy:
-
 ```racket
 #lang spicy
 
@@ -29,7 +12,22 @@ Spicy:
   (map f a))
 ```
 
-For fewer parentheses, combine with [sweet-exp](https://docs.racket-lang.org/sweet/):
+Compare **not** spicy:
+
+```racket
+#lang racket
+
+(define (->1 f) (λ (a b) (values (f a) b)))
+(define (map f . args)
+  (apply curry foldr (compose cons (->1 f)) empty args))
+
+(module+ main
+  (define a '(1 2 3))
+  (define (f x) (* x x))
+  (map f a))
+```
+
+For fewer parentheses, combine spicy with [sweet-exp](https://docs.racket-lang.org/sweet/):
 
 ```racket
 #lang sweet-exp spicy
