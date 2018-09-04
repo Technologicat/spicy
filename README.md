@@ -41,6 +41,29 @@ module+ main
   map f a
 ```
 
+To spice locally, `spicy/sauce`:
+
+```racket
+#lang sweet-exp racket
+
+require spicy/sauce
+
+module+ main
+  with-curry
+    define mymap-local(f)
+      foldr (compose cons f) empty
+    mymap-local
+      λ (x) {x * x}
+      '(1 2 3)
+  ;
+  splicing-with-curry
+    define mymap(f)
+      foldr (compose cons f) empty
+  ;; now autocurry is off
+  (mymap (λ (x) {x * x}))
+    '(1 2 3)
+```
+
 ## Examples
 
 Some more simple examples, based on those in [Hughes (1984): Why functional programming matters](http://www.cse.chalmers.se/~rjmh/Papers/whyfp.pdf) and racketified.
